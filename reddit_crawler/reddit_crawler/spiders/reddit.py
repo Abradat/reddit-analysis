@@ -42,6 +42,11 @@ class RedditSpider(scrapy.Spider):
                         'score': posts[postId]['score'],
                         'upvoteRatio': posts[postId]['upvoteRatio']
                     }
+                    num_awards = 0
+                    if 'allAwardings' in posts[postId]:
+                        for award in posts[postId]['allAwardings']:
+                            num_awards += award['count']
+                    post['numAwards'] = num_awards
                     yield post
                 elif self.is_before_start(posts[postId]['created']):
                     reached_before = True
