@@ -1,3 +1,7 @@
 scrapy
 pandas
 matplotlib
+numpy
+scipy
+sklearn
+pycorenlp

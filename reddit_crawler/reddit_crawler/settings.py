@@ -62,9 +62,10 @@ DOWNLOAD_DELAY = 0.5
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'reddit_crawler.pipelines.RedditCrawlerPipeline': 300,
-#}
+ITEM_PIPELINES = {
+   'reddit_crawler.pipelines.DataManipulatePipeline': 300,
+   'reddit_crawler.pipelines.SentimentAnalyzerPipeline': 301
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
