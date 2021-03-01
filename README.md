@@ -42,7 +42,8 @@ Upvote Ratio, number of comments, number of awards, created time, and score metr
 
 For another type of analysis, sentiments of the titles for each subreddit are plotted in a pie chart. This chart can give us information about how people may think about the topic. For example, in controversial topics like XBOX and PS5, sentiments of the titles can tell us whether people are happy with their consoles or not.
 
-All the plots are saved in the ```result``` directory as a PNG file.
+All the plots are saved in the ```result``` directory as a PNG file.  
+CSV files are located in the ```data``` directory.
 
 ## Usage
 ### Installing Requirements
