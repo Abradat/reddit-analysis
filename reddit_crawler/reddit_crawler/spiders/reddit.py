@@ -4,8 +4,9 @@ import json
 from datetime import datetime, date
 
 
-# Main Spider Responsible for Crawling Reddit
 class RedditSpider(scrapy.Spider):
+    # Main Spider Responsible for Crawling Reddit
+
     name = 'reddit'
     allowed_domains = ['reddit.com']
 
@@ -18,12 +19,14 @@ class RedditSpider(scrapy.Spider):
     def __init__(self, name=None, **kwargs):
         super(RedditSpider, self).__init__(name, **kwargs)
         self.from_date = datetime.strptime(self.from_date, '%d-%m-%Y')
+        # if user enters now as the to_date argument, today's date will be used as the to_date variable
         if self.to_date == 'now':
             self.to_date = datetime.today()
         else:
             self.to_date = datetime.strptime(self.to_date, '%d-%m-%Y')
 
     def start_requests(self):
+        # Defining the starting url for scarping the website
         url = self.generate_request_url(f'https://gateway.reddit.com/desktopapi/v1/subreddits/{self.topic}', '')
         yield scrapy.Request(url, callback=self.parse)
 
@@ -43,12 +46,12 @@ class RedditSpider(scrapy.Spider):
                         'upvoteRatio': posts[postId]['upvoteRatio']
                     }
                     num_awards = 0
-                    if 'allAwardings' in posts[postId]:
+                    if 'allAwardings' in posts[postId]: # Summing all the awards for each post
                         for award in posts[postId]['allAwardings']:
                             num_awards += award['count']
                     post['numAwards'] = num_awards
                     yield post
-                elif self.is_before_start(posts[postId]['created']):
+                elif self.is_before_start(posts[postId]['created']): # Stop crawling more when reached the date before from date variable
                     reached_before = True
                     break
         if not reached_before:
@@ -57,6 +60,8 @@ class RedditSpider(scrapy.Spider):
             yield scrapy.Request(url, callback=self.parse)
 
     def generate_request_url(self, url, after_item_id):
+        # Building the desired URL for sending request based on the last post crawled.
+
         query_params = {
             'rtj': 'only',
             'redditWebClient': 'web2x',
@@ -70,9 +75,12 @@ class RedditSpider(scrapy.Spider):
         return url + '?' + urlencode(query_params)
 
     def check_date_range(self, post_date):
+        # Check whether the given date is between from_date and to_date variables or not
+
         post_date = datetime.fromtimestamp(post_date / 1000)
         return self.from_date <= post_date <= self.to_date
 
     def is_before_start(self, post_date):
+        # Check whether the given date is before from_date variable or not
         post_date = datetime.fromtimestamp(post_date / 1000)
         return post_date < self.from_date
